@@ -13,7 +13,8 @@
 import rospy#pythonでROSを使うためのライブラリのロード
 import moveit_commander
 import geometry_msgs.msg
-import rosnode
+import rosnode  # 恐らく、rosとか諸々を立ち上げるときと一緒にいくつかのプログラム(node)も同時に起動している
+                 # そこで動いている関数やらにアクセスするためのロードだと思われる
 from tf.transformations import quaternion_from_euler
 
 
