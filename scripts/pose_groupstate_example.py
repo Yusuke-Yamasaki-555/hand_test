@@ -4,21 +4,21 @@
 
 '''
 　このコードは、SRDFファイル（XMLで記述）に記述されているアームの姿勢（モータの角度）を読み込んで姿勢を作っている
-        場所 　/home/yusuke-yamasaki/catkin_ws/src/crane_x7_ros/crane_x7_moveit_config/config/crane_x7.srdf
+        場所 　~/catkin_ws/src/crane_x7_ros/crane_x7_moveit_config/config/crane_x7.srdf
 
      
 　コードのファイルはホーム直下でも問題ない（はず）（ROSはアプリケーションではないから、どこからでもライブラリとかにアクセスできる）
 '''
 
-import rospy#pythonでROSを使うためのライブラリのロード
-import moveit_commander
-import geometry_msgs.msg
+import rospy  # pythonでROSを使うためのライブラリのロード
+import moveit_commander # moveit関連の関数のロード
+import geometry_msgs.msg  # ros：Topicの型を作る関数のロード
 import rosnode  # 恐らく、rosとか諸々を立ち上げるときと一緒にいくつかのプログラム(node)も同時に起動している
                  # そこで動いている関数やらにアクセスするためのロードだと思われる
-from tf.transformations import quaternion_from_euler
+from tf.transformations import quaternion_from_euler  # ros：(確か)座標変換のやつ(tf)
 
 
-def main():
+def main():  # main
     rospy.init_node("pose_groupstate_example")#rospyライブラリを使って、ROSのNodeを作っている　（）内はNodeの名前を指定している
     robot = moveit_commander.RobotCommander()
     arm = moveit_commander.MoveGroupCommander("arm")
