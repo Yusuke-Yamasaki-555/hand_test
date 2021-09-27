@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# tetetete
 
 '''
 　このコードは、SRDFファイル（XMLで記述）に記述されているアームの姿勢（モータの角度）を読み込んで姿勢を作っている
