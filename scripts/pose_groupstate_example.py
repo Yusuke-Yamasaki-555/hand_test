@@ -81,7 +81,7 @@ def main():  # main
     print("done")
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # main関数を使うためのIF文
     try:
         if not rospy.is_shutdown():
             main()
