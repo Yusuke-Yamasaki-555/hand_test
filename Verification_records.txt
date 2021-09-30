@@ -4,11 +4,16 @@
 　SRDFファイルをhand_test側にコピーすると、コピー元もコピー先も変更後のものをうまく読んでくれない
     対応策
     　・(未検証)SRDFファイルを別名で作成。launchファイルだかなんかの、crane_x7.srdfを指定して読めと言っているところを書き換える
+      
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+      
+
       ・SRDFファイルをひとつだけにする。crane_x7_rosからこっちに移す（group_state nameは変えない）
     　   結果：値を変えても、最初期の動きをする
     　・SRDFファイルをひとつだけにする。crane_x7_rosからこっちに移す（group_state nameを変える)
          変更内容：
-         　"home" と　"vertical"　だったのを消去、 "move_1" "move_no" を新規作成(値変更なし)。値も少しいじっている
+         　"home" と　"vertical"　だったのを消去、 "move_1" "move_no" を新規作成(値変更なし)。値も少しいじっている。source ~/.bashrcなし
          結果：
          　エラーを吐いた(move_1を読もうとしたときに)（以下、内容）
 
@@ -86,7 +91,34 @@ moveit_commander.exception.MoveItCommanderException: Unable to set target move_1
 "
 
          このエラーから、/opt/ros/noetic/lib/python3/dist-packages/moveit_commander/move_group.py　を見ればなにかわかるかも。
+          結果：ただそこの関数を使用してエラーメッセを出してただけだった。
+        ビルド＆source ~/.bashrc後、立ち上げ時に以下のエラー
 
-    　・(未検証)moveit関連のものを全部こっち側にコピーする
+        FileNotFoundError: [Errno 2] No such file or directory: '/home/yusuke-yamasaki/catkin_ws/src/crane_x7_ros/crane_x7_moveit_config/config/crane_x7.srdf'
+
+        どうやら指定の場所にないとだめぽ。
+
+        戻したらいけた。
+      
+      総合結果：srdfファイルの場所は移動してはだめ。
+      　　　　　group stateを変えたら、ビルド　＆　source ~/.bashrc
+      　　　　　
+      考察：launchファイルをどうにかすれば行けるかも
+      
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー 　
+    
+    
+    ・(未検証)moveit関連のものを全部こっち側にコピーする
+      結果：エラーを吐く（launchファイルをいじればなんとかなりそう）
+"
+Resource not found: The following package was not found in <arg name="db_path" default="$(find crane_x7_moveit_config)/default_warehouse_mongo_db"/>: crane_x7_moveit_config
+ROS path [0]=/opt/ros/noetic/share/ros
+ROS path [1]=/home/yusuke-yamasaki/catkin_ws/src
+ROS path [2]=/opt/ros/noetic/share
+The traceback for the exception was written to the log file
+
+"
+     launchファイルの仕組みを知る必要がある
      
 　コードのファイルはホーム直下でも問題ない（はず）（ROSはアプリケーションではないから、どこからでもライブラリとかにアクセスできる）
