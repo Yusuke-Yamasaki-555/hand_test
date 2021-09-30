@@ -1,12 +1,16 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# tetetete
 
 '''
 　このコードは、SRDFファイル（XMLで記述）に記述されているアームの姿勢（モータの角度）を読み込んで姿勢を作っている
         場所 　~/catkin_ws/src/crane_x7_ros/crane_x7_moveit_config/config/crane_x7.srdf
 
+    SRDFファイルをhand_test側にコピーすると、コピー元もコピー先も変更後のものをうまく読んでくれない現象あり(要検証)
+    対応策
+    　・SRDFファイルを別名で作成。launchファイルだかなんかの、crane_x7.srdfを指定して読めと言っているところを書き換える
+    　・(未検証)SRDFファイルをひとつだけにする。crane_x7_rosからこっちに移す
+    　・(未検証)moveit関連のものを全部こっち側にコピーする
      
 　コードのファイルはホーム直下でも問題ない（はず）（ROSはアプリケーションではないから、どこからでもライブラリとかにアクセスできる）
 '''
@@ -57,7 +61,7 @@ def main():  # main
     arm.go()
 
     # ハンドを少し閉じる
-    gripper.set_joint_value_target([0.7, 0.7])
+    gripper.set_joint_value_target([0.1, 0.1])
     gripper.go()
 
     # 手動で姿勢を指定するには以下のように指定
