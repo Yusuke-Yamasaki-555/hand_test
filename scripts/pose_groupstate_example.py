@@ -8,8 +8,9 @@
 
     SRDFファイルをhand_test側にコピーすると、コピー元もコピー先も変更後のものをうまく読んでくれない現象あり(要検証)
     対応策
-    　・SRDFファイルを別名で作成。launchファイルだかなんかの、crane_x7.srdfを指定して読めと言っているところを書き換える
-    　・(未検証)SRDFファイルをひとつだけにする。crane_x7_rosからこっちに移す
+    　・(未検証)SRDFファイルを別名で作成。launchファイルだかなんかの、crane_x7.srdfを指定して読めと言っているところを書き換える
+      ・SRDFファイルをひとつだけにする。crane_x7_rosからこっちに移す
+          　結果：最初
     　・(未検証)moveit関連のものを全部こっち側にコピーする
      
 　コードのファイルはホーム直下でも問題ない（はず）（ROSはアプリケーションではないから、どこからでもライブラリとかにアクセスできる）
@@ -50,14 +51,22 @@ def main():  # main
     gripper.set_joint_value_target([0.9, 0.9])
     gripper.go()
 
-    # SRDFに定義されている"home"の姿勢にする
-    print("home")
-    arm.set_named_target("home")
+    # SRDFに定義されているmove_1~3
+    print("move_1")
+    arm.set_named_target("move_1")
+    arm.go()
+    '''
+    print("move_2")
+    arm.set_named_target("move_2")
     arm.go()
 
-    # SRDFに定義されている"vertical"の姿勢にする
-    print("vertical")
-    arm.set_named_target("vertical")
+    print("move_3")
+    arm.set_named_target("move_3")
+    arm.go()
+    '''
+    # SRDFに定義されている"move_no"の姿勢にする
+    print("move_no")
+    arm.set_named_target("move_no")
     arm.go()
 
     # ハンドを少し閉じる

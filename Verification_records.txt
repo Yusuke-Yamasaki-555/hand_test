@@ -1,0 +1,92 @@
+＜検証記録＞
+
+１．crane_x7.srdfをプログラムがうまく読んでくれない問題
+　SRDFファイルをhand_test側にコピーすると、コピー元もコピー先も変更後のものをうまく読んでくれない
+    対応策
+    　・(未検証)SRDFファイルを別名で作成。launchファイルだかなんかの、crane_x7.srdfを指定して読めと言っているところを書き換える
+      ・SRDFファイルをひとつだけにする。crane_x7_rosからこっちに移す（group_state nameは変えない）
+    　   結果：値を変えても、最初期の動きをする
+    　・SRDFファイルをひとつだけにする。crane_x7_rosからこっちに移す（group_state nameを変える)
+         変更内容：
+         　"home" と　"vertical"　だったのを消去、 "move_1" "move_no" を新規作成(値変更なし)。値も少しいじっている
+         結果：
+         　エラーを吐いた(move_1を読もうとしたときに)（以下、内容）
+
+"
+
+[ INFO] [1632998832.360191823]: Loading robot model 'crane_x7'...
+[ WARN] [1632998832.360829233]: Skipping virtual joint 'table' because its child frame 'base_link' does not match the URDF frame 'world'
+[ INFO] [1632998832.360844400]: No root/virtual joint specified in SRDF. Assuming fixed joint
+[ WARN] [1632998832.408074318]: Kinematics solver doesn't support #attempts anymore, but only a timeout.
+Please remove the parameter '/robot_description_kinematics/arm/kinematics_solver_attempts' from your configuration.
+[ INFO] [1632998833.614481290, 2839.093000000]: Ready to take commands for planning group arm.
+[ INFO] [1632998833.834113395, 2839.314000000]: Ready to take commands for planning group gripper.
+Group names:
+['arm', 'gripper']
+Current state:
+joint_state: 
+  header: 
+    seq: 0
+    stamp: 
+      secs: 0
+      nsecs:         0
+    frame_id: "world"
+  name: 
+    - crane_x7_shoulder_fixed_part_pan_joint
+    - crane_x7_shoulder_revolute_part_tilt_joint
+    - crane_x7_upper_arm_revolute_part_twist_joint
+    - crane_x7_upper_arm_revolute_part_rotate_joint
+    - crane_x7_lower_arm_fixed_part_joint
+    - crane_x7_lower_arm_revolute_part_joint
+    - crane_x7_wrist_joint
+    - crane_x7_gripper_finger_a_joint
+    - crane_x7_gripper_finger_b_joint
+  position: [-0.0020278800487139037, 0.0010770165722364666, 0.0019072943795084285, -0.0018765658643298266, 0.0020079678416085045, 0.0008595852101764834, -0.002074290359362685, 0.8919488067928869, 0.8919488067928869]
+  velocity: []
+  effort: []
+multi_dof_joint_state: 
+  header: 
+    seq: 0
+    stamp: 
+      secs: 0
+      nsecs:         0
+    frame_id: "world"
+  joint_names: []
+  transforms: []
+  twist: []
+  wrench: []
+attached_collision_objects: []
+is_diff: False
+Arm initial pose:
+position: 
+  x: -7.050610528331682e-05
+  y: 1.0418289068365676e-06
+  z: 0.6239997750602541
+orientation: 
+  x: -1.6492670013911608e-07
+  y: -3.0002137983834948e-05
+  z: -9.344837028500182e-05
+  w: 0.9999999951836233
+move_1
+
+----------ここまでは正常(move_1を読む直前まで)-----以下、エラー文------------------------------------
+
+
+[ERROR] [1632998835.284084750, 2840.762000000]: The requested named target 'move_1' does not exist
+Traceback (most recent call last):
+  File "/home/yusuke-yamasaki/catkin_ws/src/hand_test/scripts/pose_groupstate_example.py", line 101, in <module>
+    main()
+  File "/home/yusuke-yamasaki/catkin_ws/src/hand_test/scripts/pose_groupstate_example.py", line 56, in main
+    arm.set_named_target("move_1")
+  File "/opt/ros/noetic/lib/python3/dist-packages/moveit_commander/move_group.py", line 406, in set_named_target
+    raise MoveItCommanderException(
+moveit_commander.exception.MoveItCommanderException: Unable to set target move_1. Is the target within bounds?
+
+
+"
+
+         このエラーから、/opt/ros/noetic/lib/python3/dist-packages/moveit_commander/move_group.py　を見ればなにかわかるかも。
+
+    　・(未検証)moveit関連のものを全部こっち側にコピーする
+     
+　コードのファイルはホーム直下でも問題ない（はず）（ROSはアプリケーションではないから、どこからでもライブラリとかにアクセスできる）
