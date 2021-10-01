@@ -1,0 +1,3 @@
+ここはただのメモです。
+
+・srdfファイル内を変更した場合、roslaunchを終了し、catkin_make 後、source ~/.bashrc
