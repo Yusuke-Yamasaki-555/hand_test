@@ -2,11 +2,8 @@
 
 １．crane_x7.srdfをプログラムがうまく読んでくれない問題
 　SRDFファイルをhand_test側にコピーすると、コピー元もコピー先も変更後のものをうまく読んでくれない
-    対応策
-    　・(未検証)SRDFファイルを別名で作成。launchファイルだかなんかの、crane_x7.srdfを指定して読めと言っているところを書き換える
-      
 
-ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
       
 
       ・SRDFファイルをひとつだけにする。crane_x7_rosからこっちに移す（group_state nameは変えない）
@@ -79,9 +76,9 @@ move_1
 
 [ERROR] [1632998835.284084750, 2840.762000000]: The requested named target 'move_1' does not exist
 Traceback (most recent call last):
-  File "/home/yusuke-yamasaki/catkin_ws/src/hand_test/scripts/pose_groupstate_example.py", line 101, in <module>
+  File "/home/===username===/catkin_ws/src/hand_test/scripts/pose_groupstate_example.py", line 101, in <module>
     main()
-  File "/home/yusuke-yamasaki/catkin_ws/src/hand_test/scripts/pose_groupstate_example.py", line 56, in main
+  File "/home/===username===/catkin_ws/src/hand_test/scripts/pose_groupstate_example.py", line 56, in main
     arm.set_named_target("move_1")
   File "/opt/ros/noetic/lib/python3/dist-packages/moveit_commander/move_group.py", line 406, in set_named_target
     raise MoveItCommanderException(
@@ -94,7 +91,7 @@ moveit_commander.exception.MoveItCommanderException: Unable to set target move_1
           結果：ただそこの関数を使用してエラーメッセを出してただけだった。
         ビルド＆source ~/.bashrc後、立ち上げ時に以下のエラー
 
-        FileNotFoundError: [Errno 2] No such file or directory: '/home/yusuke-yamasaki/catkin_ws/src/crane_x7_ros/crane_x7_moveit_config/config/crane_x7.srdf'
+        FileNotFoundError: [Errno 2] No such file or directory: '/home/===username===/catkin_ws/src/crane_x7_ros/crane_x7_moveit_config/config/crane_x7.srdf'
 
         どうやら指定の場所にないとだめぽ。
 
@@ -106,7 +103,7 @@ moveit_commander.exception.MoveItCommanderException: Unable to set target move_1
       考察：launchファイルをどうにかすれば行けるかも
       
 
-ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー 　
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
     
     
     ・(未検証)moveit関連のものを全部こっち側にコピーする
@@ -114,14 +111,48 @@ moveit_commander.exception.MoveItCommanderException: Unable to set target move_1
 "
 Resource not found: The following package was not found in <arg name="db_path" default="$(find crane_x7_moveit_config)/default_warehouse_mongo_db"/>: crane_x7_moveit_config
 ROS path [0]=/opt/ros/noetic/share/ros
-ROS path [1]=/home/yusuke-yamasaki/catkin_ws/src
+ROS path [1]=/home/===username===/catkin_ws/src
 ROS path [2]=/opt/ros/noetic/share
 The traceback for the exception was written to the log file
 
 "
      launchファイルの仕組みを知る必要がある
      
-ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+
+
+launchファイル分析
+　最初に立ち上げるlaunchファイル 
+  　  ~/catkin_ws/src/crane_x7_ros/crane_x7_gazebo/launch/crane_x7_with_table.launch
+  　45行目から、moveit関連のロードは、
+   　 ~/catkin_ws/src/crane_x7_ros/crane_x7_moveit_config/launch/demo.launch
+ 　 から行われているとわかる。
+  demo.launch
+  　30行目(のコメント)から、planning関連のロードは、
+  　　~/catkin_ws/src/crane_x7_ros/crane_x7_moveit_config/launch/planning_context.launch
+    から行われているとわかる。
+  planning_context.launch
+    11行目で、srdfファイルを読んでいる。ここで指定しているパスを変更すれば、この問題は解決するはず。
+
+検証
+　srdfファイルの場所を変えてみる。
+　　crane_x7_moveit_config/config/ から、 hand_test/moveit_config/ へ
+　結果：成功
+　
+　ファイル名を変えてみる。
+  　crane_x7.srdf から、 crane_x7_planning.srdf へ
+  結果：成功
+
+
+====================================================================================================================
+===                                                                                                              ===
+===   総合結果：launchファイルをいじったらイケる。ファイルのロード位置を変えたいときは、launchファイルも変える   ===
+===                                                                                                              ===
+====================================================================================================================
+
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+
 
 
 Intel RealSence D435をgazeboモデルに取り付けた流れ
@@ -129,3 +160,6 @@ Intel RealSence D435をgazeboモデルに取り付けた流れ
 　　https://github.com/Kuwamai/crane_x7_d435
 　Installationの手順を済ます
 　launchファイル（crane_x7_with_table.launch）のrobot_descriptionで、crane_x7_d435/urdf/crane_x7_d435.xacroを読むようにコード変更
+
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
