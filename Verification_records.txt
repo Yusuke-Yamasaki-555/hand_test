@@ -121,4 +121,11 @@ The traceback for the exception was written to the log file
 "
      launchファイルの仕組みを知る必要がある
      
-　コードのファイルはホーム直下でも問題ない（はず）（ROSはアプリケーションではないから、どこからでもライブラリとかにアクセスできる）
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+
+
+Intel RealSence D435をgazeboモデルに取り付けた流れ
+　以下を拝借する。~/catkin_ws/src/　上にclone
+　　https://github.com/Kuwamai/crane_x7_d435
+　Installationの手順を済ます
+　launchファイル（crane_x7_with_table.launch）のrobot_descriptionで、crane_x7_d435/urdf/crane_x7_d435.xacroを読むようにコード変更
