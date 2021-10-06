@@ -1,17 +1,15 @@
-#!/usr/bin/env python3
+#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
-import rospy  # pythonでROSを使うためのライブラリのロード
-import moveit_commander # moveit関連の関数のロード
-import geometry_msgs.msg  # ros：Topicの型を作る関数のロード
-import rosnode  # 恐らく、rosとか諸々を立ち上げるときと一緒にいくつかのプログラム(node)も同時に起動している
-                 # そこで動いている関数やらにアクセスするためのロードだと思われる
-from tf.transformations import quaternion_from_euler  # ros：(確か)座標変換のやつ(tf)
+import rospy
+import moveit_commander
+import geometry_msgs.msg
+import rosnode
+from tf.transformations import quaternion_from_euler
 
 
-def main():  # main
-    rospy.init_node("pose_groupstate_example")#rospyライブラリを使って、ROSのNodeを作っている　（）内はNodeの名前を指定している
+def main():
+    rospy.init_node("pose_groupstate_example")
     robot = moveit_commander.RobotCommander()
     arm = moveit_commander.MoveGroupCommander("arm")
     arm.set_max_velocity_scaling_factor(0.1)
@@ -37,28 +35,18 @@ def main():  # main
     gripper.set_joint_value_target([0.9, 0.9])
     gripper.go()
 
-    # SRDFに定義されているmove_1
-    print("move_1")
-    arm.set_named_target("move_1")
+    # SRDFに定義されている"home"の姿勢にする
+    print("home")
+    arm.set_named_target("home")
     arm.go()
-    
-    # move_noと同様の動き
-    print("move_2")
-    arm.set_named_target("move_2")
-    arm.go()
-    
-    # move_1と同様の動き
-    print("move_3")
-    arm.set_named_target("move_3")
-    arm.go()
-    
-    # SRDFに定義されている"move_no"の姿勢にする
-    print("move_0")
-    arm.set_named_target("move_0")
+
+    # SRDFに定義されている"vertical"の姿勢にする
+    print("vertical")
+    arm.set_named_target("vertical")
     arm.go()
 
     # ハンドを少し閉じる
-    gripper.set_joint_value_target([0.1, 0.1])
+    gripper.set_joint_value_target([0.7, 0.7])
     gripper.go()
 
     # 手動で姿勢を指定するには以下のように指定
@@ -83,7 +71,7 @@ def main():  # main
     print("done")
 
 
-if __name__ == '__main__':  # main関数を使うためのIF文(別にifを組む必要はない。ただの保険で、ifとtryを使っている)
+if __name__ == '__main__':
     try:
         if not rospy.is_shutdown():
             main()
