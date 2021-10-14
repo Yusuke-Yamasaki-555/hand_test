@@ -43,36 +43,29 @@ def main():  # main
     gripper.go()
     
     #srdfファイルからの読み取りは以下から(各関節角度の設定＝順運動学)
-    '''
-    # move_noと同様の動き
+    
     print("move_2")
     arm.set_named_target("move_2")
     arm.go()
     
-    # move_1と同様の動き
     print("move_3")
     arm.set_named_target("move_3")
     arm.go()
     
-    # SRDFに定義されている"move_no"の姿勢にする
-    print("move_0")
-    arm.set_named_target("move_0")
-    arm.go()
+    #print("move_reset")
+    #arm.set_named_target("move_reset")
+    #arm.go()
 
-    # ハンドを少し閉じる
-    gripper.set_joint_value_target([0.1, 0.1])
-    gripper.go()
-
-    '''
+    """
     # 手動で姿勢を指定するには以下のように指定(ターゲットの位置から各関節角度設定＝逆運動学)
      #  目標物の座標を指定(crane_x7の座標を起点として)(x:front,y:side,z:upper)
     target_pose = geometry_msgs.msg.Pose()
     target_pose.position.x = 0
-    target_pose.position.y = -0.3
-    target_pose.position.z = 0.36
+    target_pose.position.y = 0
+    target_pose.position.z = 0.3
 
-     #  目標座標でのオイラー角(XYZオイラー角(右手系)  +x:front,+y:right,+x:upper)
-    q = quaternion_from_euler( 0.0, 2.5025, 0.0 )
+     #  目標座標でのオイラー角(クォータニオン)(XYZオイラー角(右手系)  +x:front,+y:right,+z:upper)
+    q = quaternion_from_euler( 1.0, 0.0, 0.0 )
     target_pose.orientation.x = q[0]
     target_pose.orientation.y = q[1]
     target_pose.orientation.z = q[2]
@@ -80,14 +73,8 @@ def main():  # main
     arm.set_pose_target( target_pose )	# 目標ポーズ設定
     arm.go()							# 実行
 
-         #  目標物の座標を指定(crane_x7の座標を起点として)(x:front,y:side,z:upper)
-    target_pose = geometry_msgs.msg.Pose()
-    target_pose.position.x = 0
-    target_pose.position.y = 0
-    target_pose.position.z = 0.6
-
      #  z回転軸の回転角度(多分、要検証)
-    q = quaternion_from_euler( 0.0, 0.0, 0.0 )
+    q = quaternion_from_euler( 1.0, 1.0, 0.0 )
     target_pose.orientation.x = q[0]
     target_pose.orientation.y = q[1]
     target_pose.orientation.z = q[2]
@@ -99,7 +86,11 @@ def main():  # main
     print("move_reset")
     arm.set_named_target("move_reset")
     arm.go()
-
+    """
+    # ハンドを少し閉じる
+    gripper.set_joint_value_target([0.1, 0.1])
+    gripper.go()
+    
     # 移動後の手先ポーズを表示
     arm_goal_pose = arm.get_current_pose().pose
     print("Arm goal pose:")
