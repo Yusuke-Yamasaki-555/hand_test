@@ -38,7 +38,7 @@
         <joint name="crane_x7_wrist_joint" value="0" />
           <!--z軸gripper回転  deg:-170~170-->>
     </group_state>
-    <group_state name="move_1" group="arm">
+    <!--group_state name="move_1" group="arm">
 
         <joint name="crane_x7_shoulder_revolute_part_tilt_joint" value="-0.78539816339745" />
 
@@ -51,11 +51,11 @@
 
         <joint name="crane_x7_upper_arm_revolute_part_twist_joint" value="1.5707963267949" />
 
-        <!--joint name="crane_x7_lower_arm_fixed_part_joint" value="-1.5707963267949" /-->
+        <joint name="crane_x7_lower_arm_fixed_part_joint" value="-1.5707963267949" />
 
-        <!--joint name="crane_x7_wrist_joint" value="1.5707963267949" /-->
+        <joint name="crane_x7_wrist_joint" value="1.5707963267949" />
 
-    </group_state>
+    </group_state-->
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
     <end_effector name="end_effector" parent_link="crane_x7_gripper_base_link" group="gripper" />
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
