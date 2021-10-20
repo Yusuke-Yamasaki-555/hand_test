@@ -37,14 +37,14 @@ def main():  # main
     # ハンドを開く＝処理確認
     gripper.set_joint_value_target([0.9, 0.9])
     gripper.go()
-    
+    """
     #  srdfの値をプログラムから直接指定。(34行を参考)
     print("arm_set_start")
     arm.set_joint_value_target({"crane_x7_shoulder_revolute_part_tilt_joint":-0.78539816339745,\
                                 "crane_x7_shoulder_fixed_part_pan_joint":1.5707963267949})
     arm.go()
     print("arm_set_end")
-    """
+    
     #srdfファイルからの読み取りは以下から(各関節角度の設定＝順運動学)
     
     print("move_1")
@@ -59,15 +59,14 @@ def main():  # main
     arm.set_named_target("move_3")
     arm.go()
     """
-    """
-    # 手動で姿勢を指定するには以下のように指定(ターゲットの位置から各関節角度設定＝逆運動学)
-     #  目標物の座標を指定(crane_x7の座標を起点として)(x:front,y:side,z:upper)
+    
+    # 
     target_pose = geometry_msgs.msg.Pose()
     target_pose.position.x = 0
     target_pose.position.y = 0
     target_pose.position.z = 0.3
 
-     #  目標座標でのオイラー角(クォータニオン)(XYZオイラー角(右手系)  +x:front,+y:right,+z:upper)
+     #  
     q = quaternion_from_euler( 1.0, 0.0, 0.0 )
     target_pose.orientation.x = q[0]
     target_pose.orientation.y = q[1]
@@ -75,16 +74,7 @@ def main():  # main
     target_pose.orientation.w = q[3]
     arm.set_pose_target( target_pose )	# 目標ポーズ設定
     arm.go()							# 実行
-
-     #  z回転軸の回転角度(多分、要検証)
-    q = quaternion_from_euler( 1.0, 1.0, 0.0 )
-    target_pose.orientation.x = q[0]
-    target_pose.orientation.y = q[1]
-    target_pose.orientation.z = q[2]
-    target_pose.orientation.w = q[3]
-    arm.set_pose_target( target_pose )	# 目標ポーズ設定
-    arm.go()							# 実行
-    """
+    
     # 初期位置に移動
     print("move_reset")
     arm.set_named_target("move_reset")
